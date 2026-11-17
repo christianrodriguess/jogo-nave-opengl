@@ -6,10 +6,15 @@ void display();
 void teclado(unsigned char tecla, int x, int y);
 void desenhaChao();
 void desenhaNave();
+void desenhaCanhao();
 void atualizar(int valor);
 
 float nave_x = -15.0f;
 float nave_velocidade = 0.08f;
+
+float canhao_x = 0.0f;
+float canhao_y = 0.0f;
+float canhao_z = 8.0f;
 
 int main(int argc, char **argv){
     glutInit(&argc, argv);
@@ -53,6 +58,7 @@ void display(void){
 
     desenhaChao();
     desenhaNave();
+    desenhaCanhao();
 
     glutSwapBuffers();
 }
@@ -98,6 +104,30 @@ void desenhaNave(){
     glPushMatrix();
         glTranslatef(0.0f, 0.35f, 0.0f);
         glutSolidSphere(0.6, 20, 20);
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
+void desenhaCanhao(){
+    glPushMatrix();
+    glTranslatef(canhao_x, canhao_y, canhao_z);
+
+    // base (meia esfera achatada apoiada no chão)
+    glColor3f(0.3f, 0.3f, 0.3f);
+    glPushMatrix();
+        glScalef(1.4f, 0.5f, 1.4f);
+        glutSolidSphere(1.0, 24, 24);
+    glPopMatrix();
+
+    // corpo do cano (cilindro apontando para o céu)
+    // glutSolidCylinder desenha ao longo do eixo Z, então giramos -90° em X
+    // para que ele aponte para +Y (para cima)
+    glColor3f(0.15f, 0.15f, 0.2f);
+    glPushMatrix();
+        glTranslatef(0.0f, 0.3f, 0.0f);
+        glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+        glutSolidCylinder(0.45, 2.5, 24, 4);
     glPopMatrix();
 
     glPopMatrix();
